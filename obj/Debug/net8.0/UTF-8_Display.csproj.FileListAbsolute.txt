@@ -1,0 +1,14 @@
+C:\Users\jarek\source\repos\UTF-8_Display\bin\Debug\net8.0\UTF-8_Display.exe
+C:\Users\jarek\source\repos\UTF-8_Display\bin\Debug\net8.0\UTF-8_Display.deps.json
+C:\Users\jarek\source\repos\UTF-8_Display\bin\Debug\net8.0\UTF-8_Display.runtimeconfig.json
+C:\Users\jarek\source\repos\UTF-8_Display\bin\Debug\net8.0\UTF-8_Display.dll
+C:\Users\jarek\source\repos\UTF-8_Display\bin\Debug\net8.0\UTF-8_Display.pdb
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.AssemblyInfoInputs.cache
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.AssemblyInfo.cs
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.csproj.CoreCompileInputs.cache
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.dll
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\refint\UTF-8_Display.dll
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.pdb
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.genruntimeconfig.cache
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\ref\UTF-8_Display.dll
