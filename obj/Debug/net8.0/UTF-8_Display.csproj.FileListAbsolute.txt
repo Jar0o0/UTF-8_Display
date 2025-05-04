@@ -12,3 +12,4 @@ C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\refint\UTF-8_Display.
 C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.pdb
 C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.genruntimeconfig.cache
 C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\ref\UTF-8_Display.dll
+C:\Users\jarek\source\repos\UTF-8_Display\obj\Debug\net8.0\UTF-8_Display.sourcelink.json

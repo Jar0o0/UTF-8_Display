@@ -1,7 +1,5 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Text;
+
 
 namespace UTF8_Display
 {
@@ -61,6 +59,81 @@ namespace UTF8_Display
         {
             this.x = p0.x;
             this.y = p0.y;
+            this.character = character;
+        }
+    }
+
+    public struct Line
+    {
+        public Point p0;
+        public Point p1;
+        public string character;
+
+        public Line(Point p0, Point p1, string character)
+        {
+            this.p0 = p0;
+            this.p1 = p1;
+            this.character = character;
+        }
+    }
+
+    public struct Triangle
+    {
+        public Point p0;
+        public Point p1;
+        public Point p2;
+        public string character;
+
+        public Triangle(Point p0, Point p1, Point p2, string character)
+        {
+            this.p0 = p0;
+            this.p1 = p1;
+            this.p2 = p2;
+            this.character = character;
+        }
+    }
+    public struct Rectangle
+    {
+        public Point p0;
+        public Point p1;
+        public string character;
+
+        public Rectangle(Point p0, Point p1, string character)
+        {
+            this.p0 = p0;
+            this.p1 = p1;
+            this.character = character;
+        }
+    }
+
+    public struct Quad
+    {
+        public Point p0;
+        public Point p1;
+        public Point p2;
+        public Point p3;
+        public string character;
+
+        public Quad(Point p0, Point p1, Point p2, Point p3, string character)
+        {
+            this.p0 = p0;
+            this.p1 = p1;
+            this.p2 = p2;
+            this.p3 = p3;
+            this.character = character;
+        }
+    }
+
+    public struct Circle
+    {
+        public Point center;
+        public int radius;
+        public string character;
+
+        public Circle(Point p0, int radius, string character)
+        {
+            this.center = p0;
+            this.radius = radius;
             this.character = character;
         }
     }
@@ -129,39 +202,34 @@ namespace UTF8_Display
         /// <param name="request"></param>
         public void MakeRequest(DisplayUpdateRequest request)
         {
+            if (request.x > resolution.x || request.y > resolution.y) return;
             requests.Add(request);
         }
 
-        /// <summary>
-        /// Draws a line between points p0 and p1.
-        /// </summary>
-        /// <param name="p0"></param>
-        /// <param name="p1"></param>
-        /// <param name="character"></param>
-        public void DrawLine(Point p0, Point p1, string character)
+        public void DrawLine(Line line)
         {
-            MakeRequest(new DisplayUpdateRequest(p0, character));
-            MakeRequest(new DisplayUpdateRequest(p1, character));
+            MakeRequest(new DisplayUpdateRequest(line.p0, line.character));
+            MakeRequest(new DisplayUpdateRequest(line.p1, line.character));
 
-            int dx = Math.Abs(p1.x - p0.x);
-            int dy = Math.Abs(p1.y - p0.y);
+            int dx = Math.Abs(line.p1.x - line.p0.x);
+            int dy = Math.Abs(line.p1.y - line.p0.y);
 
-            int sx = p0.x < p1.x ? 1 : -1;
-            int sy = p0.y < p1.y ? 1 : -1;
+            int sx = line.p0.x < line.p1.x ? 1 : -1;
+            int sy = line.p0.y < line.p1.y ? 1 : -1;
 
             int err = dx - dy;
 
-            Point current = new Point(p0.x, p0.y);
+            Point current = new Point(line.p0.x, line.p0.y);
 
             while (true)
             {
                 // Skip the start and end points
-                if (!(current.x == p0.x && current.y == p0.y) && !(current.x == p1.x && current.y == p1.y))
+                if (!(current.x == line.p0.x && current.y == line.p0.y) && !(current.x == line.p1.x && current.y == line.p1.y))
                 {
-                    MakeRequest(new DisplayUpdateRequest(current, character));
+                    MakeRequest(new DisplayUpdateRequest(current, line.character));
                 }
 
-                if (current.x == p1.x && current.y == p1.y)
+                if (current.x == line.p1.x && current.y == line.p1.y)
                     break;
 
                 int e2 = 2 * err;
@@ -180,34 +248,23 @@ namespace UTF8_Display
             }
         }
 
-        /// <summary>
-        /// Draws a rectangle with opposite corners p0 and p1.
-        /// </summary>
-        /// <param name="p0"></param>
-        /// <param name="p1"></param>
-        /// <param name="renderWalls"></param>
-        /// <param name="wallCharacter"></param>
-        /// <param name="fill"></param>
-        /// <param name="fillCharacter"></param>
-        public void DrawRectangle(Point p0, Point p1, bool renderWalls ,string wallCharacter, bool fill, string fillCharacter)
+
+        public void DrawRectangle(Rectangle rect, bool fill)
         {
-            int xMax = Math.Max(p0.x, p1.x);
-            int xMin = Math.Min(p0.x, p1.x);
-            int yMax = Math.Max(p0.y, p1.y);
-            int yMin = Math.Min(p0.y, p1.y);
+            int xMax = Math.Max(rect.p0.x, rect.p1.x);
+            int xMin = Math.Min(rect.p0.x, rect.p1.x);
+            int yMax = Math.Max(rect.p0.y, rect.p1.y);
+            int yMin = Math.Min(rect.p0.y, rect.p1.y);
 
             Point point1 = new Point(xMin, yMin);
             Point point2 = new Point(xMax, yMin);
             Point point3 = new Point(xMax, yMax);
             Point point4 = new Point(xMin, yMax);
 
-            if (renderWalls)
-            {
-                DrawLine(point1, point2, wallCharacter);
-                DrawLine(point2, point3, wallCharacter);
-                DrawLine(point3, point4, wallCharacter);
-                DrawLine(point4, point1, wallCharacter);
-            }
+            DrawLine(new Line(point1, point2, rect.character));
+            DrawLine(new Line(point2, point3, rect.character));
+            DrawLine(new Line(point3, point4, rect.character));
+            DrawLine(new Line(point4, point1, rect.character));
 
             if (fill)
             {
@@ -215,61 +272,79 @@ namespace UTF8_Display
                 {
                     for (int x = xMin + 1; x < xMax; x++)
                     {
-                        MakeRequest(new DisplayUpdateRequest(new Point(x, y), fillCharacter));
+                        MakeRequest(new DisplayUpdateRequest(new Point(x, y), rect.character));
                     }
                 }
             }
         }
 
-        /// <summary>
-        /// Draws a triangle on points p0, p1, p2.
-        /// </summary>
-        /// <param name="p0"></param>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="wallCharacter"></param>
-        /// <param name="fill"></param>
-        /// <param name="fillCharacter"></param>
-        public void DrawTriangle(Point p0, Point p1, Point p2, string wallCharacter, bool fill, string fillCharacter)
+        public void DrawTriangle(Triangle tri, bool fill)
         {
             if (fill)
             {
-                int yMax = Math.Max(Math.Max(p0.y, p1.y), p2.y);
-                int yMin = Math.Min(Math.Min(p0.y, p1.y), p2.y);
-                int xMax = Math.Max(Math.Max(p0.x, p1.x), p2.x);
-                int xMin = Math.Min(Math.Min(p0.x, p1.x), p2.x);
+                int yMax = Math.Max(Math.Max(tri.p0.y, tri.p1.y), tri.p2.y);
+                int yMin = Math.Min(Math.Min(tri.p0.y, tri.p1.y), tri.p2.y);
+                int xMax = Math.Max(Math.Max(tri.p0.x, tri.p1.x), tri.p2.x);
+                int xMin = Math.Min(Math.Min(tri.p0.x, tri.p1.x), tri.p2.x);
 
                 for (int y = yMin; y < yMax; y++)
                 {
                     for (int x = xMin; x < xMax; x++)
                     {
-                        if (IsInsideTriangle(p0, p1, p2, new Point(x, y)))
+                        if (IsInsideTriangle(tri.p0, tri.p1, tri.p2, new Point(x, y)))
                         {
-                            MakeRequest(new DisplayUpdateRequest(new Point(x, y), fillCharacter));
+                            MakeRequest(new DisplayUpdateRequest(new Point(x, y), tri.character));
                         }
                     }
                 }
             }
 
-            DrawLine(p0, p1, wallCharacter);
-            DrawLine(p1, p2, wallCharacter);
-            DrawLine(p2, p0, wallCharacter);
+            DrawLine(new Line(tri.p0, tri.p1, tri.character));
+            DrawLine(new Line(tri.p1, tri.p2, tri.character));
+            DrawLine(new Line(tri.p2, tri.p0, tri.character));
         }
 
-        /// <summary>
-        /// Draws a quad (Points should be put clockwise)
-        /// </summary>
-        /// <param name="p0"></param>
-        /// <param name="p1"></param>
-        /// <param name="p2"></param>
-        /// <param name="p3"></param>
-        /// <param name="wallCharacter"></param>
-        public void DrawQuad(Point p0, Point p1, Point p2, Point p3, string wallCharacter)
+        public void DrawQuad(Quad quad, bool fill)
         {
-            DrawLine(p0, p1, wallCharacter);
-            DrawLine(p1, p2, wallCharacter);
-            DrawLine(p2, p3, wallCharacter);
-            DrawLine(p3, p0, wallCharacter);
+            DrawLine(new Line(quad.p0, quad.p1, quad.character));
+            DrawLine(new Line(quad.p1, quad.p2, quad.character));
+            DrawLine(new Line(quad.p2, quad.p3, quad.character));
+            DrawLine(new Line(quad.p3, quad.p0, quad.character));
+
+            if (fill)
+            {
+                int xMax = Math.Max(quad.p0.x, Math.Max(quad.p1.x, quad.p2.x));
+                int xMin = Math.Min(quad.p0.x, Math.Min(quad.p1.x, quad.p2.x));
+                int yMax = Math.Max(quad.p0.y, Math.Max(quad.p1.y, quad.p2.y));
+                int yMin = Math.Min(quad.p0.y, Math.Min(quad.p1.y, quad.p2.y));
+
+                for (int y = yMin; y < yMax; y++)
+                {
+                    for (int x = xMin; x < xMax; x++)
+                    {
+                        if(IsInsideTriangle(quad.p0, quad.p1, quad.p2, new Point(x, y)))
+                        {
+                            MakeRequest(new DisplayUpdateRequest(new Point(x, y), quad.character));
+                        }
+                    }
+                }
+
+                xMax = Math.Max(quad.p2.x, Math.Max(quad.p3.x, quad.p0.x));
+                xMin = Math.Min(quad.p2.x, Math.Min(quad.p3.x, quad.p0.x));
+                yMax = Math.Max(quad.p2.y, Math.Max(quad.p3.y, quad.p0.y));
+                yMin = Math.Min(quad.p2.y, Math.Min(quad.p3.y, quad.p0.y));
+
+                for (int y = yMin; y < yMax; y++)
+                {
+                    for (int x = xMin; x < xMax; x++)
+                    {
+                        if (IsInsideTriangle(quad.p2, quad.p3, quad.p0, new Point(x, y)))
+                        {
+                            MakeRequest(new DisplayUpdateRequest(new Point(x, y), quad.character));
+                        }
+                    }
+                }
+            }
         }
 
         public Display(Point resolution)
@@ -304,6 +379,60 @@ namespace UTF8_Display
                 }
                 
             }
+        }
+
+        public void DrawCircle(Circle cir, bool fill)
+        {
+            int x = cir.radius;
+            int y = 0;
+            int decisionOver2 = 1 - x;
+
+            while (y <= x)
+            {
+                if (fill)
+                {
+                    // Draw horizontal lines between symmetric points
+                    FillCircleLine(cir.center, x, y, cir.character);
+                    FillCircleLine(cir.center, y, x, cir.character);
+                }
+                else
+                {
+                    PlotCirclePoints(cir.center, x, y, cir.character);
+                }
+
+                y++;
+
+                if (decisionOver2 <= 0)
+                {
+                    decisionOver2 += 2 * y + 1;
+                }
+                else
+                {
+                    x--;
+                    decisionOver2 += 2 * (y - x) + 1;
+                }
+            }
+        }
+
+        private void FillCircleLine(Point center, int x, int y, string character)
+        {
+            for (int i = center.x - x; i <= center.x + x; i++)
+            {
+                MakeRequest(new DisplayUpdateRequest(new Point(i, center.y + y), character));
+                MakeRequest(new DisplayUpdateRequest(new Point(i, center.y - y), character));
+            }
+        }
+
+        private void PlotCirclePoints(Point center, int x, int y, string character)
+        {
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x + x, center.y + y), character));
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x - x, center.y + y), character));
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x + x, center.y - y), character));
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x - x, center.y - y), character));
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x + y, center.y + x), character));
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x - y, center.y + x), character));
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x + y, center.y - x), character));
+            MakeRequest(new DisplayUpdateRequest(new Point(center.x - y, center.y - x), character));
         }
 
         /// <summary>

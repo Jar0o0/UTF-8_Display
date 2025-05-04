@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("UTF-8_Display")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+69510bd8385c45c3b58b40bdd9f93b67035e86c3")]
 [assembly: System.Reflection.AssemblyProductAttribute("UTF-8_Display")]
 [assembly: System.Reflection.AssemblyTitleAttribute("UTF-8_Display")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
