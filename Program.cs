@@ -7,17 +7,27 @@ namespace UTF_8_Display
     {
         public static void Main(string[] args)
         {
-            Display display = new Display(new Point(32, 32));
-            display.DisplayConfig(ConsoleColor.Green);
+            Display display = new Display(new Point(28, 28));
+            display.DisplayConfig(ConsoleColor.White);
             Point p0 = new Point(4, 4);
             Point p1 = new Point(20, 10);
-            Point p2 = new Point(28, 25);
+            Point p2 = new Point(23, 25);
             Point p3 = new Point(7, 19);
-            //display.DrawQuad(new Quad(p0, p1, p2, p3, "#"), true);
-            //display.DrawTriangle(new Triangle(p0, p1, p2, "$"), true);
-            //display.DrawRectangle(new Rectangle(p0, p2, "%"), true);
-            //display.DrawCircle(new Circle(p2, 5, "^"), true);
-            display.DrawText(p0, "HELLO WORLD");
+            Point p4 = new Point(13, 13);
+
+
+            Line line = new Line(p0, p1);
+            Triangle tri = new Triangle(p0, p3, p1);
+            Quad quad = new Quad(p0, p1, p2, p3);
+            Circle circle = new Circle(p4, 10);
+
+            display.DrawRectangle(circle.GetBoundingBox(), "*", false, ConsoleColor.Green);
+            display.DrawCircle(circle, "@", true, ConsoleColor.Red);
+            display.UpdateDisplay();
+            Frame frame = new Frame(display.frameBuffer, display.colorBuffer);
+            display.DrawLine(line, "@", ConsoleColor.Red);
+            display.UpdateDisplay();
+            display.LoadFrame(frame);
             display.UpdateDisplay();
 
             Console.ReadKey();
